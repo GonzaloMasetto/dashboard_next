@@ -16,17 +16,17 @@ export async function authenticate(
   try {
     await signIn('credentials', formData);
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return 'Invalid credentials.';
-        default:
-          return 'Something went wrong.';
-      }
+    const typedError = error as { type?: string };
+
+    switch (typedError.type) {
+      case 'CredentialsSignin':
+        return 'Invalid credentials.';
+      default:
+        return 'Something went wrong.';
     }
-    throw error;
   }
 }
+
 
 const FormSchema = z.object({
   id: z.string(),
